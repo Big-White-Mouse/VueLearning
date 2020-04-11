@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+</head>
+<body>
+<div id="app">
+    <input type="button" value="控制" @click="toggle">
+<!--    显示隐藏元素-->
+<!--    v-if通过endif注释控制元素，，根本是控制元素的删除与创建-->
+    <h3 v-if="flag">v-if</h3>
+<!--    v-show不会从新进行DOM的删除创建，只是切换了元素的display，none的样式-->
+    <h3 v-show="flag">v-show</h3>
+<!--    v-if有较高的切换性能消耗 用于不常用的元素-->
+<!--    v-show有较高的初始渲染消耗  用于频繁切换的元素-->
+</div>
+<script>
+    let vm = new Vue({
+        el:'#app',
+        data:{
+            flag:true,
+        },
+        methods:{
+            toggle(){
+                this.flag = !this.flag;
+            }
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+    <script src="lib/vue-resource.js"></script>
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+        }
+        #app{
+            width: 800px;
+            text-align: center;
+            position: relative;
+            top: 10px;
+        }
+        .tab{
+            position: absolute;
+            top: 50px;
+            left: 40px;
+            border: 1px solid black;
+            margin: auto;
+        }
+        .edit{
+            position: relative;
+            top: 10px;
+            left: 50px;
+        }
+        .edit div{
+            float: left;
+        }
+        .edit>input{
+            float: left;
+        }
+        .hint{
+            float: left;
+            color: red;
+        }
+        .search{
+            position: relative;
+            top: 10px;
+            left: 40px;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="edit">
+        <div class="addId">ID: <input type="text" v-model="id"></div>
+        <div class="addName">Title: <input type="text" v-model="title"></div>
+        <input type="button" value="添加" @click="add">
+        <span class="hint" v-show="flag">error</span>
+    </div>
+    <table class="tab">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Ctime</th>
+            <th>Operation</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="item in list" :key="item.id">
+            <td>{{item.id}}</td>
+            <td>{{item.title}}</td>
+            <td><a href="" @click="del(item.id)">删除</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+    //全局配置请求接口根域名，后面的url以相对论路径开头，即前面不带‘/’
+    Vue.http.options.root = 'http://jsonplaceholder.typicode.com/';
+    //全局配置form表单格式
+    Vue.http.options.emulateJSON = true;
+    let vm = new Vue({
+        el: '#app',
+        data: {
+            list:[],
+            id:'',
+            title:'',
+            flag: false,
+            keywords:'',
+        },
+        created(){//当vm实例的data和methods初始化完毕后，vm会自动执行created生命周期函数
+            //不用mounted因为created时，两个已经初始化完毕，此时请求数据后立即就能渲染页面，用mounted时就要重新替之前的假数据，重新挂载
+            this.getAllList();
+        },
+        methods: {
+            getAllList(){//获取产品列表
+                this.$http.get('posts').then(function(result){
+                    if(result.status === 200){
+                        //成功
+                        this.list = result.body;
+                        console.log(result.body);
+                    } else {
+                        //失败
+                        console.log('oops');
+                    }
+                })
+            },
+            add(){
+                this.$http.post('posts',{title: this.title}).then(result => {
+                    console.log(result);
+                    //由于这个网站不会真的在服务器中添加数据，只是仿造了一个数据，所以访问不到添加的第101条数据
+                    this.getAllList();
+                    this.title = '';
+                })
+            },
+            del(id){
+                this.$http.delete('posts').then(result => {
+                    console.log(result);
+                    this.getAllList()
+                })
+            },
+        },
+    })
+</script>
+</body>
+</html>

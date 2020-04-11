@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="lib/vue.js"></script>
+</head>
+<body>
+<div id="app">
+<!--    父组件向子组件传递方法,使用事件绑定机制: v-on -->
+    <com1 v-on:func="show"></com1>
+</div>
+
+<template id="tmp1">
+    <div>
+        <h1>com1子组件tmp1</h1>
+        <input type="button" value="触发父组件传递来的方法" @click="myshow">
+    </div>
+</template>
+<script>
+    let com1 = {//子组件
+        template: '#tmp1',
+        data(){return{
+            people:{
+                name: 'zs',
+                age: 20,
+            }
+        }},
+        methods: {
+            myshow(){
+                //点击子组件的按钮,调用父组件传递来的方法
+                //emit:调用,触发
+                this.$emit('func', 123, this.people)//第一个参数是调用,后面的参数为传参
+            }
+        },
+    }
+    let vm = new Vue({//父组件
+        el: '#app',
+        data: {
+            dataPeople: '',
+        },
+        methods: {
+            show(data,data2){
+                console.log('show方法的调用' + data);
+                console.log(data2);
+                this.dataPeople = data2;//父组件获取子组件的数据 或者说 子组件通过方法调用向父组件传值
+                console.log(this.dataPeople);
+            }
+        },
+        components: {
+            com1
+            //com1:com1简写
+        }
+    })
+</script>
+</body>
+</html>

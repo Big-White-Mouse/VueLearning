@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="lib/vue.js"></script>
+</head>
+<body>
+<div id="app">
+    <p id="p">{{ msg }}</p>
+    <input type="button" value="改变数据" @click="change">
+</div>
+<script>
+    //从Vue创建，运行到销毁 伴随着各种各样的事件，这些事件统称为生命周期
+    //生命周期钩子 = 生命周期函数 = 生命周期事件
+    //生命周期函数分分类：
+        //创建时期，运行时期，销毁时期
+    let vm = new Vue({
+        el: '#app',
+        data: {
+            msg: 'msg',
+        },
+        methods: {
+            show(){
+                console.log('show');
+            },
+            change(){
+                this.msg = 'ok';
+            },
+        },
+        beforeCreate(){//第一个生命周期函数，表示实例完全被创建出来之前，会执行他
+            // console.log(this.msg);//undefined
+            // this.show();//show is not a function
+            //在beforeCreate生命周期函数执行之前，data和methods中的数据还未初始化
+        },
+        created(){//第二个生命周期函数
+            console.log(this.msg);//msg
+            this.show();//show
+            //如果要调用methods中的方法或者操作data中的数据，最早只能在created中操作
+        },
+        beforeMount(){//第三个生命周期函数，表示模板已经在内存中编辑完成了，但是尚未把模板渲染到页面中
+            console.log(document.getElementById('p').innerText);//{{ msg }}
+        },
+        mounted(){//第四个生命周期函数，表示内存中的模板已经挂载到页面中，用户可见
+            console.log(document.getElementById('p').innerText);//msg
+            //mounted是实例创建期间最后一个生命周期函数，执行完mounted表示实力已经完全被创建好了，如果没有其他操作，实例不会变化
+        },
+        beforeUpdate(){//运行中的第一个事件，表示数据更新，页面还未更新
+            console.log('页面：' + document.getElementById('p').innerText);//msg
+            console.log('data数据：' + this.msg);//ok
+        },
+        updated(){//第二个，表示数据渲染完成
+            console.log('页面：' + document.getElementById('p').innerText);//ok
+            console.log('data数据：' + this.msg);//ok
+
+        },
+    })
+    //生命周期过程：
+        //组件创建
+            //创建-->beforeCreate
+            //初始化-->create
+            //判断是否有el属性
+            //判断是否有template模板
+            //没有就将el指定的DOM编译为模板
+            //模板在内存中编译完成-->beforeMount
+            //把模板字符串渲染成内存中的DOM-->mounted
+        //组件运行
+            //data改变-->beforeUpdate
+            //重新渲染DOM-->update
+            //-->Mounted-->data改变
+        //组件销毁
+            //deforeDestroy
+            //组件身上所有的data，methods，filter过滤器都可用
+            //destroyed
+            //完全销毁
+</script>
+</body>
+</html>

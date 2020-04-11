@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="lib/vue.js"></script>
+    <style>
+        .v-enter{
+            opacity: 0;
+            height: 100px !important;
+            width: 160px !important;
+            top: 40px !important;
+            left: 40px !important;
+        }
+
+        .v-leave-to{
+            opacity: 0;
+            height: 40px !important;
+            width: 66px !important;
+            top: 60px !important;
+            left: 66px !important;
+        }
+
+        .v-enter-active,.v-leave-active{
+            transition: all 0.3s ease;
+        }
+        #app h3{
+            display: block;
+            border: 1px solid #222222;
+            height: 60px;
+            width: 100px;
+            line-height: 60px;
+            text-align: center;
+            position: absolute;
+            top: 50px;
+            left: 46px;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <a href="" @click.prevent="comName='login'">登录</a>
+    <a href="" @click.prevent="comName='register'">注册</a>
+
+<!--    <transition mode="in-out"> 控制动画顺序 还有out-in 这里不需要-->
+    <transition>
+        <component :is="comName"></component>
+    </transition>
+
+</div>
+<script>
+    Vue.component('login', {
+        template: '<h3>login</h3>'
+    })
+    Vue.component('register', {
+        template: '<h3>register</h3>'
+    })
+
+    let vm = new Vue({
+        el: '#app',
+        data: {
+            comName: 'login' //使用变量改变组件
+        },
+        methods: {},
+    })
+</script>
+</body>
+</html>

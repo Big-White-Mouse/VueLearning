@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+</head>
+<body>
+<div id="app">
+<!--    v-for 循环对象-->
+    <p v-for="(val,key,i) in user">键：{{key}} --- 值：{{val}} --- 索引{{i}}</p>
+<!--    v-for 迭代数字 count 从 1 开始-->
+    <p v-for="count in 10">这是第{{count}}循环</p>
+</div>
+<script>
+let vm = new Vue({
+    el:'#app',
+    data: {
+        user:{
+            id:1,
+            name:'zs',
+            gender:'man',
+        }
+    },
+    methods:{},
+})
+</script>
+</body>
+</html>

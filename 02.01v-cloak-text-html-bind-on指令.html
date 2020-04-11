@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    [v-cloak]{
+        display: none;
+    }
+</style>
+<body>
+<div id="app">
+    <p v-cloak="">-----{{msg}}</p>
+<!--    使用插值表达式渲染页面 不会更改表达式中其他的内容-->
+    <span v-text="msg">------</span>
+<!--    使用v-text也可以渲染 并且没有闪烁问题 但是标签中的原内容会被替换-->
+    <div v-text="msg2"></div>
+<!--    v-text会把标签转译-->
+    <div v-html="msg2"></div>
+<!--    如果想渲染标签，要用v-html  同v-text，也会将标签原有内容替换掉-->
+    <input type="button" v-bind:value="button" :title="mytitle + '123'" v-on:click="print" @mouseover="con">
+<!--    1.v-bind:是vue中提供的用于绑定的属性 2.支持字符串拼接 3.简写形式只有一个:-->
+<!--    v-on vue的事件绑定机制 参数为methods属性中的变量   简写 @-->
+<!--    v-on绑定的函数可以带小括号用于传参-->
+</div>
+<script src="./lib/vue.js"></script>
+<!--当网速 较慢 来不及加载vue组件的时候 可能代码会被直接展示到页面上 叫做插值表达式的闪烁 这时通过v-cloak属性解决-->
+<script>
+    let vm = new Vue({
+        el:'#app',
+        data:{
+            msg:'123',
+            msg2:'<h3>div</h3>',
+            button:'按钮1',
+            mytitle:'自定义title',
+        },
+        methods:{//methods属性中定义了当前Vue实例所有可用的方法
+            print:function(){
+                console.log('hello');
+            },
+            con (){//ES6写法，[方法名] ([参数]) {[函数体]}
+                //在vm实例中想要获取data上的数据 或者 调用method方法，必须通过this.属性名 或 this.方法名 来进行访问，这里的this指new出来的VM实例对象
+                var c = this.msg;
+                console.log(c);
+                //vm实例会监听data中数据的改变，发生改变自动重新渲染
+                this.msg = c + '1';
+            }
+        }
+    })
+</script>
+</body>
+</html>

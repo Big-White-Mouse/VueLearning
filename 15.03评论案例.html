@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="lib/vue.js"></script>
+    <style>
+        li {
+            display: block;
+            border: 1px solid #111;
+            width: 800px;
+        }
+
+        li span {
+            border-right: 1px solid #111;
+        }
+
+        .box {
+            float: left;
+        }
+
+        ul {
+            position: absolute;
+            top: 60px;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <com1 @fun="loadComments"></com1>
+    <ul>
+        <li v-for="item in list" :key="item.id">
+            <span>用户: {{ item.user }}</span>
+            <span>评论: {{ item.comment }}</span>
+        </li>
+    </ul>
+</div>
+
+<template id="tmp1">
+    <div>
+        <div class="box">
+            <span>用户:</span>
+            <textarea cols="30" rows="3" v-model="user"></textarea>
+        </div>
+        <div class=box>
+            <span>评论:</span>
+            <textarea cols="30" rows="3" v-model="comment"></textarea>
+        </div>
+        <input type="button" value="发表评论" @click="postComment">
+    </div>
+</template>
+
+<script>
+
+    let vm = new Vue({
+        el: '#app',
+        data: {
+            list: [
+                {id: Date.now(), user: 'zs', comment: '123456'},
+                {id: Date.now(), user: 'ls', comment: 'abcdef'},
+                {id: Date.now(), user: 'ww', comment: 'ghijkl'},
+            ]
+        },
+        methods: {
+            loadComments(){//进入页面加载评论
+                let list = JSON.parse(localStorage.getItem('cmts') || '[]');
+                this.list = list
+            }
+        },
+        created(){
+            this.loadComments()//初始化完成后调用获取评论方法
+        },
+
+        //子组件
+        components: {
+            com1: {
+                template: '#tmp1',
+                data() {
+                    return {
+                        user: '',
+                        comment: '',
+                    }
+                },
+                methods :{
+                    postComment() {
+
+                        //初始化评论
+                        let content = { id: Date.now(), user: this.user, comment: this.comment }
+
+                        //从本地仓库取数据并保存到数组中,取不到返回空,以防数据转换时报错
+                        let list = JSON.parse(localStorage.getItem('cmts') || '[]');
+                        list.unshift(content);//unshift将新对象放在数组的头部
+
+                        //将最新的数据存回本地仓库,仓库只支持字符串,所以使用stringify转换
+                        localStorage.setItem('cmts',JSON.stringify(list))
+
+                        //清空数据,以备下次接收
+                        this.user = this.comment = '';
+
+                        //从子组件调用父组件中刷新评论区的方法，
+                        //因为在父组件中，没有按钮，不知道何时调用刷新方法
+                        //而在子组件中，没有元素，没法调用刷新方法
+                        this.$emit('fun')
+                    }
+                }
+            }
+        }
+    })
+</script>
+</body>
+</html>

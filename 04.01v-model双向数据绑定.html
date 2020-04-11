@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+    <style>
+
+    </style>
+</head>
+<body>
+<div id="app">
+    <input type="text" v-bind:value="msg">
+<!--    v-bind只能实现单项绑定 从M绑定到V-->
+    <input type="text" v-model="msg">
+<!--   v-model 能进行数据的双向绑定 -->
+<!--    注意v-model只能用在表单元素(input,select,checkbox,textarea)中-->
+</div>
+<script>
+//双向：缓存中的数据会被渲染到页面，同时，通过页面修改的数据也会保存到缓存
+//表单是一种具有双向数据属性传输的元素
+    let vm = new Vue({
+        el:'#app',
+        data:{
+            msg:'hello',
+        },
+        methods:{
+
+        }
+    })
+</script>
+</body>
+</html>

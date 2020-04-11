@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+        }
+        #app{
+            width: 800px;
+            text-align: center;
+            position: relative;
+            top: 10px;
+        }
+        .tab{
+            position: absolute;
+            top: 50px;
+            left: 40px;
+            border: 1px solid black;
+            margin: auto;
+        }
+        .edit{
+            position: relative;
+            top: 10px;
+            left: 50px;
+        }
+        .edit div{
+            float: left;
+        }
+        .edit>input{
+            float: left;
+        }
+        .hint{
+            float: left;
+            color: red;
+        }
+        .search{
+            position: absolute;
+            top: 10px;
+            left: 560px;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="edit">
+        <div class="addId">ID: <input type="text" v-model="id"></div>
+        <div class="addName">Name: <input type="text" v-model="name" @keyup.enter="add"></div>
+<!--        键盘修饰符
+            .enter .tab .delete .esc .space .up .down .left .right
+            上面是VUE内置，如果要实现其他按键，搜js对应键盘事件的键码，比如F2键码是112，@keyup.112="..."
+            或者自定义全局案件修饰符 如Vue.config.keyCodes.f2 = 112-->
+        <input type="button" value="添加" @click="add">
+        <span class="hint" v-show="flag">error</span>
+    </div>
+    <div class="search">
+        <input type="text" v-model="keywords">
+        <input type="button" value="搜索">
+    </div>
+    <table class="tab">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Ctime</th>
+            <th>Operation</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="item in search(keywords)" :key="item.id">
+            <td>{{ item.id }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.ctime | dateFormat }}</td>
+            <td><a href="" @click.prevent="del(item.id)">删除</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+    Vue.config.keyCodes.f2 = 112;//自定义按键修饰符
+    Vue.filter('dateFormat',function(dateStr){
+        var dt = new Date(dateStr);
+
+        var y = dt.getFullYear();
+        var m = (dt.getMonth()).toString().padStart(2,'0');
+        var d = (dt.getDate()).toString().padStart(2,'0');
+        var h = (dt.getHours()).toString().padStart(2,'0');
+        var mm = (dt.getMinutes()).toString().padStart(2,'0');
+        var ss = (dt.getSeconds()).toString().padStart(2,'0');
+        return `${y}-${m}-${d}-${h}-${mm}-${ss}`;
+    })
+    let vm = new Vue({
+        el: '#app',
+        data: {
+            list:[
+                {id:1,name:'zs',ctime: new Date()},
+                {id:2,name:'ls',ctime: new Date()},
+                {id:3,name:'ww',ctime: new Date()},
+                {id:4,name:'zl',ctime: new Date()},
+            ],
+            id:'',
+            name:'',
+            flag: false,
+            keywords:'',
+        },
+        methods: {
+            add(){
+                if(this.id && this.name){
+                    var man = {id: this.id, name: this.name, ctime: new Date()};
+                    this.list.push(man);
+                    this.id = this.name = '';
+                    this.flag = false;
+                } else {
+                    this.flag = true;
+                }
+            },
+            del(id){
+                this.list.some((item, i)=>{
+                    if (item.id === id){
+                        this.list.splice(i, 1);
+                        return true;
+                    }
+                })
+            },
+            search(keywords){
+                var newList = [];
+                this.list.forEach(item=>{
+                    if(item.name.indexOf(keywords) != -1){
+                        newList.push(item);
+                    }
+                });
+                return newList;
+            },
+        },
+    })
+
+</script>
+</body>
+</html>

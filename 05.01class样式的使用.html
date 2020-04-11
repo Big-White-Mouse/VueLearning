@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+    <style>
+        .red{
+            color: red;
+        }
+        .thin{
+            font-weight: lighter;
+        }
+        .italic{
+            font-style: italic;
+        }
+        .active{
+            letter-spacing: .5em;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+<!--   第一种：通过原生内联样式 -->
+    <span class="red thin">有一些文字有一些文字有一些文字有一些文字</span><br>
+<!--    第二种： 通过v-bind 用数组形式传递(无用)-->
+    <span :class="['thin','italic']">有一些文字有一些文字有一些文字有一些文字</span><br>
+<!--    第三种： v-bind + 三元表达式-->
+    <span :class="['italic',flag?'active':'']">有一些文字有一些文字有一些文字有一些文字</span><br>
+<!--    第四种 使用对象 {'类名':布尔值} 为true时应用类-->
+    <span :class="['red','thin',{'active':flag}]">有一些文字有一些文字有一些文字有一些文字</span><br>
+<!--    直接使用对象-->
+    <span :class="classObj">有一些文字有一些文字有一些文字有一些文字</span><br>
+</div>
+<script>
+    let vm = new Vue({
+        el:'#app',
+        data:{
+            flag:true,
+            classObj:{red:true,thin:true,active:false,italic:true},
+        },
+        methods:{},
+    });
+</script>
+</body>
+</html>

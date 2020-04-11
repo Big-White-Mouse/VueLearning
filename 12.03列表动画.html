@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="lib/vue.js"></script>
+    <style>
+        .v-enter,.v-leave-to{
+            opacity: 0;
+            transform: translateY(60px);
+        }
+        .v-enter-active,.v-leave-active{
+            transition: all .6s ease;
+        }
+        .v-move{
+            transition: all .6s ease;
+        }
+        /*删除时下面的元素渐入*/
+        .v-leave-active{
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="change">
+        Id:<input type="text" v-model="id">
+        Name:<input type="text" v-model="name">
+        <input type="button" value="添加" @click="add">
+    </div>
+        <transition-group appear tag="ul">
+<!--            appear属性实现刷新页面入场效果,默认添加span包裹下面的元素达成效果，使用tag=""自定义标签-->
+<!--            v-for 创建动画必须有 :key属性 -->
+            <li v-for="item in list" :key="item.id" @click="del(i)">
+                {{item.id}}----{{item.name}}
+            </li>
+        </transition-group>
+</div>
+<script>
+    let vm = new Vue({
+        el: '#app',
+        data: {
+            flag: false,
+            list: [
+                {id: 1, name: 'zs'},
+                {id: 2, name: 'ls'},
+                {id: 3, name: 'ww'},
+                {id: 4, name: 'zl'}
+            ],
+            id: '',
+            name: '',
+        },
+        methods: {
+            add(){
+                this.list.push({id: this.id, name: this.name});
+                this.id = this.name = '';
+            },
+            del(i){
+                this.list.splice(i, 1);
+            }
+        },
+    })
+</script>
+</body>
+</html>
