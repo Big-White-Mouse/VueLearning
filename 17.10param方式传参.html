@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="lib/vue.js"></script>
+    <script src="lib/vue-router.js"></script>
+</head>
+<body>
+<div id="app">
+    <!--    在路由中使用查询字符串的方法传递参数，不需要修改路由规则的path-->
+    <router-link to="/login/10">登录</router-link>
+    <router-link to="/register">注册</router-link>
+    <router-view></router-view>
+</div>
+<script>
+    let login = {
+        template: '<h1>登录 --- {{ $route.params.id }}</h1>',
+        created(){//组件生命周期钩子函数
+            console.log(this.$route);
+        }
+    }
+    let register = {
+        template: '<h1>注册</h1>'
+    }
+    let router = new VueRouter({
+        routes: [
+            //':id'是一个占位符，将来这个位置的参数要被解析为id
+            { path: '/login/:id', component: login },
+            { path: '/register', component: register }
+        ]
+    })
+    let vm = new Vue({
+        el: '#app',
+        data: {},
+        methods: {},
+        router
+    })
+</script>
+</body>
+</html>

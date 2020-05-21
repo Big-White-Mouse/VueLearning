@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="lib/vue.js"></script>
+    <script src="lib/vue-router.js"></script>
+</head>
+<body>
+<div id="app">
+
+<!--    router-link默认渲染一个a标签-->
+    <router-link to="/login">login</router-link>
+    <router-link to="/register" tag="span">register</router-link>
+<!--    不管渲染成什么标签,都可以点击跳转-->
+
+<!--    <a href="#/login">login</a>-->
+<!--    <a href="#/register">register</a>-->
+    <router-view></router-view>
+</div>
+<script>
+    let login = {
+        template: '<h1>登陆组件</h1>'
+    }
+    let register = {
+        template: '<h1>注册组件</h1>'
+    }
+
+    let routerObj = new VueRouter({
+        routes: [
+            {path: '/login', component: login },
+            {path: '/register', component: register},
+        ]
+    })
+
+    let vm = new Vue({
+        el: '#app',
+        data: {},
+        methods: {},
+
+        router: routerObj
+    })
+</script>
+</body>
+</html>

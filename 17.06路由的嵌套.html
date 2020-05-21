@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+    <script src="./lib/vue-router.js"></script>
+</head>
+<body>
+
+<div id="app">
+    <router-link to="/acc">Account</router-link>
+    <router-view></router-view>
+</div>
+
+<template id="tmp">
+    <div>
+        <h1>Account组件</h1>
+        <router-link to="/acc/login">登录</router-link>
+        <router-link to="/acc/register">注册</router-link>
+        <router-view></router-view>
+    </div>
+</template>
+
+<script>
+
+
+    //组件的模板对象
+    var account = {
+        template: '#tmp'
+    }
+    var login = {
+        template: '<h3>登录</h3>'
+    }
+    var register = {
+        template: '<h3>注册</h3>'
+    }
+
+    var router = new VueRouter({
+        routes:[
+            {
+                path: '/acc',
+                component: account,
+                children: [
+                    { path: 'login', component: login },
+                    { path: 'register', component: register },
+                    //使用children属性实现子路用，里面的path不需要带/
+                ]
+            },
+        ]
+    })
+    let vm = new Vue({
+        el: '#app',
+        data: {},
+        methods: {},
+        router: router
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="lib/vue.js"></script>
+    <script src="lib/vue-router.js"></script>
+    <style>
+/*     vue-router自带的类   */
+        .router-link-active,.active{
+            color: red;
+            font-size: 28px;
+            transition: 0.2s;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+
+    <router-link to="/login">login</router-link>
+    <router-link to="/register">register</router-link>
+
+    <router-view></router-view>
+</div>
+<script>
+    let login = {
+        template: '<h1>登陆组件</h1>'
+    }
+    let register = {
+        template: '<h1>注册组件</h1>'
+    }
+
+    let routerObj = new VueRouter({
+        routes: [
+            {path: '/', redirect: '/login'},
+            {path: '/login', component: login },
+            {path: '/register', component: register},
+        ],
+        linkActiveClass : 'active',
+    })
+
+    let vm = new Vue({
+        el: '#app',
+        data: {},
+        methods: {},
+
+        router: routerObj
+    })
+</script>
+</body>
+</html>
